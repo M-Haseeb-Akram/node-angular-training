@@ -21,13 +21,11 @@ class MiddlewareValidator {
                 .withMessage('Username must be at least 5 characters')
                 .matches(/^[a-zA-Z]+$/)
                 .withMessage('Only Characters aer allowed!'),
-            check('email')
-                .isEmail()
-                .withMessage('Valid Email is Required')
-
-                .custom(async ({ req }) => {
+            check('email').isEmail().withMessage('Valid Email is Required'),
+            body('email')
+                .custom(async (email) => {
                     const isNewEmail = await User.findOne({
-                        where: { email: require.body.email },
+                        where: { email: email },
                     });
                     if (isNewEmail) {
                         return false;
@@ -54,17 +52,6 @@ class MiddlewareValidator {
     static UserLogin = () => {
         return [
             check('email').isEmail().withMessage('Valid Email is Required'),
-            // .custom(async ({ req }) => {
-            //     const isExistingEmail = await User.findOne({
-            //         where: { email: req.body.email },
-            //     });
-            //     if (isExistingEmail) {
-            //         return false;
-            //     } else {
-            //         return true;
-            //     }
-            // })
-            // .withMessage('Email does not exist, Go and SingUp'),
             check('password').notEmpty().withMessage('Password is required'),
         ];
     };
