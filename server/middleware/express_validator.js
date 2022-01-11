@@ -22,18 +22,20 @@ class MiddlewareValidator {
                 .matches(/^[a-zA-Z]+$/)
                 .withMessage('Only Characters aer allowed!'),
             check('email').isEmail().withMessage('Valid Email is Required'),
-            body('email')
-                .custom(async (email) => {
-                    const isNewEmail = await User.findOne({
-                        where: { email: email },
-                    });
-                    if (isNewEmail) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-                })
-                .withMessage('Email already Exist'),
+            // check('email')
+            //     .isEmail()
+            //     .withMessage('Valid Email is Required')
+            //     .custom(async ({ req }) => {
+            //         const isNewEmail = await User.findOne({
+            //             where: { email: req.body.email },
+            //         });
+            //         if (isNewEmail) {
+            //             return false;
+            //         } else {
+            //             return true;
+            //         }
+            //     })
+            //     .withMessage('Email already Exist'),
             check('password')
                 .isLength({ min: 5 })
                 .withMessage('Password must be of length > 5'),
